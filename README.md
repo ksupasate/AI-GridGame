@@ -1,85 +1,61 @@
-# AI ช่วยเล่นเกม - Streamlit Edition
+# AI Game Assistant (Streamlit)
 
-เครื่องมือช่วยเล่นเกมที่ใช้ AI วิเคราะห์กระดานเกมผ่าน OpenAI Vision API
+A mobile-friendly Streamlit app that captures your board state, sends it to the OpenAI Vision API for analysis, and reads the guidance aloud so you can stay focused on the game.
 
-## ฟีเจอร์
+## Features
+- Camera capture via Streamlit (mobile-ready touch targets and layout)
+- Vision analysis with `gpt-4o-mini` using tailored prompts for different coaching styles
+- Text-to-speech output for hands-free guidance
+- Lightweight setup with either `conda` or `pip`
 
-- 📸 ถ่ายภาพกระดานเกม
-- 🤖 วิเคราะห์ด้วย AI (OpenAI Vision gpt-4o-mini)
-- 🎯 4 โหมดการวิเคราะห์: เชิงกลยุทธ์, เชิงการสอน, เชิงรายละเอียด, เชิงสบายๆ
-- 🔊 อ่านผลการวิเคราะห์ออกเสียง
-- 📱 รองรับมือถือ
+## Quick start
+Prerequisite: Python 3.11+
 
-## ติดตั้ง
-
-### ใช้ Conda (แนะนำ)
-
+**Conda (recommended)**
 ```bash
 conda env create -f environment.yml
 conda activate ai-grid-guide
 ```
 
-### ใช้ pip
-
+**pip**
 ```bash
 pip install -r requirements.txt
 ```
 
-## ตั้งค่า
-
-1. คัดลอก `.env.example` เป็น `.env`:
+## Configuration
+Copy the example environment file and set your OpenAI API key (or enter it in the Streamlit sidebar at runtime):
 ```bash
 cp .env.example .env
+# then edit .env and set OPENAI_API_KEY
 ```
 
-2. ใส่ OpenAI API key ของคุณใน `.env`:
-```
-OPENAI_API_KEY=sk-your-actual-key-here
-```
-
-หรือใส่ API key ตรงๆ ในแอป (sidebar)
-
-## รันแอป
-
+## Run the app
 ```bash
 streamlit run streamlit_app.py
 ```
+The app starts at `http://localhost:8501`.
 
-แอปจะเปิดที่ `http://localhost:8501`
+## Usage
+1. Provide your `OPENAI_API_KEY` in the sidebar (or via `.env`).
+2. Choose an analysis mode that matches how you want the AI to coach you.
+3. Tap **Take Photo**, frame the board, and capture.
+4. Let the app analyze the image and listen to the spoken recommendations.
 
-## วิธีใช้
-
-1. ใส่ OpenAI API key ใน sidebar (หรือตั้งค่าใน `.env`)
-2. เลือกโหมดการวิเคราะห์
-3. กด "📸 ถ่ายภาพกระดาน" เพื่อถ่ายรูป
-4. กด "🎯 วิเคราะห์" เพื่อให้ AI วิเคราะห์
-5. กด "🔊 อ่านออกเสียง" เพื่อฟังผลการวิเคราะห์
-
-## โครงสร้างโปรเจค
-
+## Project structure
 ```
 ai-grid-guide/
-├── streamlit_app.py          # แอปหลัก
+├── streamlit_app.py        # Streamlit UI
 ├── src/
-│   ├── __init__.py
-│   ├── openai_client.py      # เชื่อมต่อ OpenAI API
-│   └── prompts.py            # โหมดการวิเคราะห์
-├── requirements.txt          # Python dependencies
-├── environment.yml           # Conda environment
-├── .env.example             # ตัวอย่าง API key
+│   ├── auto_processor.py   # Image hashing, rate limiting, and capture helpers
+│   ├── openai_client.py    # OpenAI Vision and TTS helpers
+│   ├── prompts.py          # Prompt builder and mode definitions
+│   └── simple_capture.py   # Alternative capture helper using st.camera_input
+├── requirements.txt
+├── environment.yml
+├── .env.example
 └── README.md
 ```
 
-## Deploy
-
-Deploy ไปยัง Streamlit Cloud:
-
-1. Push code ไป GitHub
-2. ไปที่ [share.streamlit.io](https://share.streamlit.io)
-3. เชื่อมต่อ repository
-4. เพิ่ม `OPENAI_API_KEY` ใน Secrets
-5. Deploy
-
-## เวอร์ชันเดิม
-
-เวอร์ชัน HTML/JavaScript เก็บไว้ใน `index.html` และ `index.js`
+## Notes
+- Keep your API key private; do not commit real keys to version control.
+- If you deploy to Streamlit Community Cloud, add `OPENAI_API_KEY` as a secret in the dashboard.
